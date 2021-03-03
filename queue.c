@@ -120,8 +120,22 @@ bool q_remove_head(queue_t *q, char *sp, size_t bufsize)
 {
     /* TODO: You need to fix up this code. */
     /* TODO: Remove the above comment when you are about to implement. */
-    q->head = q->head->next;
-    return true;
+    if (q && q->size != 0) {
+        if (sp) {
+            strncpy(sp, q->head->value, bufsize - 1);
+            sp[bufsize - 1] = '\0';
+        }
+        list_ele_t *tmp = q->head;
+        q->head = q->head->next;
+        tmp->next = NULL;
+        free(tmp->value);
+        free(tmp);
+        q->size--;
+        if (!q->size)
+            q->tail = NULL;
+        return true;
+    }
+    return false;
 }
 
 /*
@@ -150,6 +164,18 @@ void q_reverse(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (q) {
+        list_ele_t **head = &q->head;
+        list_ele_t *cursor = NULL;
+        q->tail = q->head;
+        while (*head) {
+            list_ele_t *tmp = (*head)->next;
+            (*head)->next = cursor;
+            cursor = *head;
+            *head = tmp;
+        }
+        (*head) = cursor;
+    }
 }
 
 /*
@@ -157,8 +183,47 @@ void q_reverse(queue_t *q)
  * No effect if q is NULL or empty. In addition, if q has only one
  * element, do nothing.
  */
+
+void MergeSort(queue_t *left, queue_t *right, queue_t *q)
+{
+    q->size = left->size + right->size;
+    list_ele_t **indirect = &q->head;
+
+    for (int i = 0; i < q->size; i++) {
+        if (!right->head ||
+            (left->head && LESS_THAN(left->head->value, right->head->value))) {
+            (*indirect) = left->head;
+            left->head = left->head->next;
+        } else {
+            (*indirect) = right->head;
+            right->head = right->head->next;
+        }
+        indirect = &(*indirect)->next;
+    }
+    q->tail =
+        (list_ele_t *) ((char *) indirect - (long) &((list_ele_t *) 0)->next);
+}
+
 void q_sort(queue_t *q)
 {
     /* TODO: You need to write the code for this function */
     /* TODO: Remove the above comment when you are about to implement. */
+    if (!q || !q->head || q->size == 1)
+        return;
+    queue_t left, right;
+    left.size = (q->size >> 1);
+    right.size = (q->size >> 1) + (q->size & 1);
+    list_ele_t *cur = left.head = q->head;
+    right.tail = q->tail;
+
+    for (size_t i = 0; i < left.size - 1; i++)
+        cur = cur->next;
+
+    left.tail = cur;
+    right.head = cur->next;
+    left.tail->next = NULL;
+
+    q_sort(&left);
+    q_sort(&right);
+    MergeSort(&left, &right, q);
 }

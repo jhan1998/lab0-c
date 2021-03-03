@@ -34,7 +34,7 @@ $(GIT_HOOKS):
 	@scripts/install-git-hooks
 	@echo
 
-OBJS := qtest.o report.o console.o harness.o queue.o \
+OBJS := qtest.o report.o console.o harness.o queue.o strnatcmp.o\
         random.o dudect/constant.o dudect/fixture.o dudect/ttest.o \
         linenoise.o
 
@@ -50,7 +50,7 @@ qtest: $(OBJS)
 	$(Q)$(CC) -o $@ $(CFLAGS) -c -MMD -MF .$@.d $<
 
 check: qtest
-	./$< -v 3 -f traces/trace-eg.cmd
+	./$< -v 3 -f traces/trace-07-robust.cmd
 
 test: qtest scripts/driver.py
 	scripts/driver.py -c
