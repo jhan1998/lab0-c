@@ -192,7 +192,7 @@ void MergeSort(queue_t *left, queue_t *right, queue_t *q)
 
     for (int i = 0; i < q->size; i++) {
         if (!right->head ||
-            (left->head && LESS_THAN(left->head->value, right->head->value))) {
+            (left->head && strcmp(right->head->value, left->head->value) > 0)) {
             (*indirect) = left->head;
             left->head = left->head->next;
         } else {
