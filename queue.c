@@ -95,11 +95,12 @@ bool q_insert_tail(queue_t *q, char *s)
                 return false;
             }
             strncpy(newt->value, s, len);
-            q->tail->next = newt;
-            q->tail = newt;
             newt->next = NULL;
-            if (!q->size)
+            if (q->size)
+                q->tail->next = newt;
+            else
                 q->head = newt;
+            q->tail = newt;
             q->size++;
             return true;
         }

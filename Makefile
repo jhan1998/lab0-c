@@ -50,7 +50,7 @@ qtest: $(OBJS)
 	$(Q)$(CC) -o $@ $(CFLAGS) -c -MMD -MF .$@.d $<
 
 check: qtest
-	./$< -v 3 -f traces/trace-07-robust.cmd
+	./$< -v 3 -f traces/trace-17-complexity.cmd
 
 test: qtest scripts/driver.py
 	scripts/driver.py -c
