@@ -10,8 +10,7 @@
 
 #include <stdbool.h>
 #include <stddef.h>
-#include "strnatcmp.h"
-#define LESS_THAN(a, b) strnatcasecmp(a, b) < 0
+#define LESS_THAN(a, b) strcmp(a, b) > 0
 
 /* Data structure declarations */
 

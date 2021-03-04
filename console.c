@@ -18,7 +18,7 @@
 #include "report.h"
 
 /* Some global values */
-bool simulation = false;
+int simulation = false;
 static cmd_ptr cmd_list = NULL;
 static param_ptr param_list = NULL;
 static bool block_flag = false;
@@ -304,7 +304,7 @@ static bool do_help_cmd(int argc, char *argv[])
     param_ptr plist = param_list;
     report(1, "Options:");
     while (plist) {
-        report(1, "\t%s\t%d\t%s", plist->name, *plist->valp,
+        report(1, "\t%s\t%d\t%s", plist->name, (int) *(bool *) plist->valp,
                plist->documentation);
         plist = plist->next;
     }
