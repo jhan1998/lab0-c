@@ -649,10 +649,13 @@ void completion(const char *buf, linenoiseCompletions *lc)
 
 bool run_console(char *infile_name)
 {
-    if (!push_file(infile_name)) {
-        report(1, "ERROR: Could not open source file '%s'", infile_name);
-        return false;
-    }
+    if (infile_name) {
+        if (!push_file(infile_name)) {
+            report(1, "ERROR: Could not open source file '%s'", infile_name);
+            return false;
+        }
+    } else
+        has_infile = false;
 
     if (!has_infile) {
         char *cmdline;
